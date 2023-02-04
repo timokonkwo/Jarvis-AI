@@ -9,8 +9,10 @@ import webbrowser as web
 import pyautogui
 import psutil
 import pyjokes
+import sys
 
 engine = pyttsx3.init()
+
 
 def speak(text):
     engine.say(text)
@@ -18,10 +20,12 @@ def speak(text):
 # name = input("Enter your name: ")
 # speak('hello')
 
+
 def time():
     Time = datetime.datetime.now().strftime("%I:%H:%S")
     speak("Ok sir, The Current time is")
     speak(Time)
+
 
 def date():
     year = datetime.datetime.now().year
@@ -34,12 +38,13 @@ def date():
     speak(year)
 # date()
 
+
 def greet():
     speak("Welcome to Mr. Tim's Intelligent Support")
     # time()
     # date()
     hour = datetime.datetime.now().hour
-    if hour >= 6 and hour <=12:
+    if hour >= 6 and hour <= 12:
         speak('Good Morning Sir!')
     elif hour >= 12 and hour <= 18:
         speak('Good afternoon sir!')
@@ -49,23 +54,24 @@ def greet():
         speak('Good Night sir!')
 
     speak('How may i help you today?')
-greet()
+
 
 def take():
     r = sr.Recognizer()
     with sr.Microphone() as source:
         # print("Speak Sir\nI am Listening...")
         r.pause_threshold = 1
-        # r.adjust_for_ambient_noise(source, duration=0.2)
-        audio = r.record(source, duration=2)
-        #listens for the user's input
+        r.adjust_for_ambient_noise(source, duration=0.2)
+        audio = r.record(source, duration=3)
+        # listens for the user's input
         # audio = r.listen(source)
 
     try:
-        print("\nRecognizing your speech...")
+        # print("\nRecognizing your speech...")
         query = r.recognize_google(audio, language='en-Us')
         print(query)
-        speak(query)
+
+        # speak(query)
 
     except Exception as e:
         print(e)
@@ -75,6 +81,7 @@ def take():
 
     return query
 
+
 def email(to, content):
     server = smtplib.SMTP("smtp.gmail.com", 587)
     server.ehlo()
@@ -83,11 +90,13 @@ def email(to, content):
     server.sendmail("okonkwotim00@gmail.com", to, content)
     server.close()
 
+
 def screenshot():
     img = pyautogui.screenshot()
     img.save("C:/Users/Tim/Pictures/AI/screen.png")
     print('I have taken the screenshot sir')
     speak('I have taken the screenshot sir')
+
 
 def cpu():
     usage = str(psutil.cpu_percent())
@@ -96,8 +105,7 @@ def cpu():
     battery = psutil.sensors_battery()
     percent = str(battery.percent)
     print(f'The Battery percent is {percent}%')
-    speak("The battery of your computer is at "+ percent + " Percent")
-
+    speak("The battery of your computer is at " + percent + " Percent")
 
 
 def jokes():
@@ -124,8 +132,8 @@ if __name__ == "__main__":
 
         elif "date" in query:
             date()
-        elif "offline" in query:
-            speak("Ok sir, I am going offline now, Bye bye")
+        elif "exit" in query or "stop" in query:
+            speak("Ok sir, I am closing myself now, Bye bye")
             quit()
         elif "shut" in query:
             speak("ok sir, i will be shutting down your laptop shortly!!!, Bye bye")
@@ -172,7 +180,8 @@ if __name__ == "__main__":
                 speak("I am unable to send the Email sir")
         elif "search" in query:
             speak("what should i search sir?")
-            chromepath = 'C:/Users/Tim/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Accessories/internet explorer'#"C:/ProgramData/Microsoft/Windows/Start Menu/Programs/Google chrome.exe"  #"C:\\Program Files\\Internet Explorer\\iexplore.exe"
+            # "C:/ProgramData/Microsoft/Windows/Start Menu/Programs/Google chrome.exe"  #"C:\\Program Files\\Internet Explorer\\iexplore.exe"
+            chromepath = 'C:/Users/Tim/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Accessories/internet explorer'
             search = take().lower()
             web.get(chromepath).open_new_tab(search + ".com")
 
@@ -192,7 +201,7 @@ if __name__ == "__main__":
         elif 'screenshot' in query:
             screenshot()
 
-        elif "who is Tim" in query:
+        elif "tim" in query:
             speak("Tim is a programmer. He is a web developer too and he built me")
 
         elif 'battery' in query:
